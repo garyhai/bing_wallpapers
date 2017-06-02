@@ -95,7 +95,11 @@ for p in "${urls[@]}"; do
     if [ $FORCE ] || [ ! -f "$PICTURE_DIR/$filename" ]; then
         print_message "Downloading: $filename..."
         curl $CURL_QUIET -Lo "$PICTURE_DIR/$filename" "$p"
+        "/Applications/Mission Control.app/Contents/MacOS/Mission Control"
+        osascript -e "tell application \"System Events\" to set properties of desktops to {picture rotation:0, picture : \"$PICTURE_DIR/$filename\"}"
     else
         print_message "Skipping: $filename..."
+        "/Applications/Mission Control.app/Contents/MacOS/Mission Control"
+        osascript -e "tell application \"System Events\" to set picture rotation of desktops to 1"
     fi
 done
