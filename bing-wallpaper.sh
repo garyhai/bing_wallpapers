@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 readonly SCRIPT=$(basename "$0")
-readonly VERSION='0.1.1'
+readonly VERSION='0.2.0'
 
 usage() {
 cat <<EOF
