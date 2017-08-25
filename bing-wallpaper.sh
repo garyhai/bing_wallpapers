@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 readonly SCRIPT=$(basename "$0")
-readonly VERSION='0.3.1'
+readonly VERSION='0.3.2'
 
 usage() {
 cat <<EOF
@@ -80,7 +80,7 @@ mkdir -p "${PICTURE_DIR}"
 # Parse bing.com and acquire picture URL(s)
 API="${BING_HOME}/HPImageArchive.aspx?format=xml&idx=-1&n=1"
 ACTION="curl -sL \"${API}\" | \
-        ggrep -Po '(?<=\<urlBase\>)(.*?)(?=\</urlBase\>)'"
+        grep -Po '(?<=\<urlBase\>)(.*?)(?=\</urlBase\>)'"
 CODE="curl -o /dev/null --silent --head --write-out '%{http_code}\n'"
 u="${BING_HOME}`eval $ACTION`"
 for sz in "${SIZES[@]}"; do
