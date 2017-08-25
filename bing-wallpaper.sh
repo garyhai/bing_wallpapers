@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 readonly SCRIPT=$(basename "$0")
-readonly VERSION='0.2.0'
+readonly VERSION='0.3.0'
 
 usage() {
 cat <<EOF
@@ -13,10 +13,6 @@ Usage:
 Options:
   -f --force                     Force download of picture. This will overwrite
                                  the picture if the filename already exists.
-  -s --size                      Size of the photos. [default:1920x1080]
-                                 [1920x1200, 1920x1080, 1366x768]
-  -d --day                       Day of the bing photo before now. [default: 0]
-  -c --count                     Count of photos to fetch. [default: 1]
   -q --quiet                     Do not display log messages.
   -n --filename <file name>      The name of the downloaded picture. Defaults to
                                  the upstream name.
@@ -36,9 +32,7 @@ print_message() {
 
 # Defaults
 PICTURE_DIR="$HOME/Pictures/bing-wallpapers/"
-SIZE="1920x1080"
-DAY="0"
-COUNT="1"
+SIZES=("1920x1200" "1920x1080" "1366x768")
 BING_HOME="https://www.bing.com"
 
 # Option parsing
@@ -52,18 +46,6 @@ while [[ $# -gt 0 ]]; do
             ;;
         -n|--filename)
             FILENAME="$2"
-            shift
-            ;;
-        -s|--size)
-            SIZE="$2"
-            shift
-            ;;
-        -d|--day)
-            DAY="$2"
-            shift
-            ;;
-        -c|--count)
-            COUNT="$2"
             shift
             ;;
         -f|--force)
@@ -96,12 +78,15 @@ done
 mkdir -p "${PICTURE_DIR}"
 
 # Parse bing.com and acquire picture URL(s)
-API="${BING_HOME}/HPImageArchive.aspx?format=xml&idx=$DAY&n=$COUNT"
+API="${BING_HOME}/HPImageArchive.aspx?format=xml&idx=-1&n=1"
 ACTION="curl -sL \"${API}\" | \
         ggrep -Po '(?<=\<urlBase\>)(.*?)(?=\</urlBase\>)'"
-urls=( `eval $ACTION`)
-for p in "${urls[@]}"; do
-    url="${BING_HOME}${p}_${SIZE}.jpg"
+CODE="curl -o /dev/null --silent --head --write-out '%{http_code}\n'"
+u="${BING_HOME}`eval $ACTION`"
+for sz in "${SIZES[@]}"; do
+    url="${u}_${sz}.jpg"
+    http_code=`eval $CODE "$url"`
+    if [ $http_code -ne 200 ]; then continue; fi
     if [ -z "$FILENAME" ]; then
         filename=$(echo "$url"|sed -e "s/.*\/\(.*\)/\1/")
     else
@@ -122,4 +107,5 @@ for p in "${urls[@]}"; do
         osascript -e "tell application \"System Events\" \
                       to set picture rotation of desktops to 1"
     fi
+    break
 done
