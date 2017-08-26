@@ -11,7 +11,7 @@ all:
 	@echo "You may get GNU grep by homebrew."
 
 install:
-	-$(LAUNCHER) unload $(PLIST_FILE)
+	@-$(LAUNCHER) unload $(PLIST_FILE) 2> /dev/null
 	cp $(AGENT_FILE) $(PLIST_FILE)
 	cp $(ACTOR) $(ACTOR_FILE)
 	$(LAUNCHER) load $(PLIST_FILE)
