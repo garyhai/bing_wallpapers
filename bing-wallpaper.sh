@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 readonly SCRIPT=$(basename "$0")
-readonly VERSION='0.4.0'
+readonly VERSION='0.5.0'
 
 usage() {
 cat <<EOF
@@ -19,6 +19,10 @@ Options:
   -p --picturedir <picture dir>  The full path to the picture download dir.
                                  Will be created if it does not exist.
                                  [default: $HOME/Pictures/bing-wallpapers/]
+  -s --size                      Preferred size of the photos. [default:1920x1200]
+                                 [1920x1200, 1920x1080, 1366x768]
+  -d --day                       Day of the bing photo count from today.
+                                 [-1, tomorrow; 0, today; 1, yesterday]
   -h --help                      Show this screen.
   --version                      Show version.
 EOF
@@ -33,6 +37,7 @@ print_message() {
 # Defaults
 PICTURE_DIR="$HOME/Pictures/bing-wallpapers/"
 SIZES=("1920x1200" "1920x1080" "1366x768")
+DAY="-1"
 BING_HOME="https://www.bing.com"
 GGREP="/usr/local/bin/grep"
 
@@ -47,6 +52,14 @@ while [[ $# -gt 0 ]]; do
             ;;
         -n|--filename)
             FILENAME="$2"
+            shift
+            ;;
+        -s|--size)
+            SIZES=("$2" "${SIZES[@]}")
+            shift
+            ;;
+        -d|--day)
+            DAY="$2"
             shift
             ;;
         -f|--force)
@@ -79,7 +92,7 @@ done
 mkdir -p "${PICTURE_DIR}"
 
 # Parse bing.com and acquire picture URL(s)
-API="${BING_HOME}/HPImageArchive.aspx?format=xml&idx=-1&n=1"
+API="${BING_HOME}/HPImageArchive.aspx?format=xml&idx=${DAY}&n=1"
 ACTION="curl -sL \"${API}\" | \
         ${GGREP} -Po '(?<=\<urlBase\>)(.*?)(?=\</urlBase\>)'"
 CODE="curl -o /dev/null --silent --head --write-out '%{http_code}\n'"
