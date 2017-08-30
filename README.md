@@ -27,7 +27,6 @@ Usage:
 Options:
   -f --force                     Force download of picture. This will overwrite
                                  the picture if the filename already exists.
-  -s --ssl                       Communicate with bing.com over SSL.
   -q --quiet                     Do not display log messages.
   -n --filename <file name>      The name of the downloaded picture. Defaults to
                                  the upstream name.
