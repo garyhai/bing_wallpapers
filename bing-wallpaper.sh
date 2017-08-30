@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 readonly SCRIPT=$(basename "$0")
-readonly VERSION='0.5.2'
+readonly VERSION='0.6.0'
 
 usage() {
 cat <<EOF
@@ -41,7 +41,6 @@ PICTURE_DIR="$HOME/Pictures/bing-wallpapers/"
 SIZES=("1920x1200" "1920x1080" "1366x768")
 DAY="0"
 BING_HOME="https://www.bing.com"
-GGREP="/usr/local/bin/grep"
 
 # Option parsing
 while [[ $# -gt 0 ]]; do
@@ -95,8 +94,9 @@ mkdir -p "${PICTURE_DIR}"
 
 # Parse bing.com and acquire picture URL(s)
 API="${BING_HOME}/HPImageArchive.aspx?format=xml&idx=${DAY}&n=1"
-ACTION="curl -sL \"${API}\" | \
-        ${GGREP} -Po '(?<=\<urlBase\>)(.*?)(?=\</urlBase\>)'"
+MATCH="perl -nle 'print $& if m{(?<=\<urlBase\>)(.*?)(?=\</urlBase\>)}'"
+##MATCH="grep -Po '(?<=\<urlBase\>)(.*?)(?=\</urlBase\>)'"
+ACTION="curl -sL \"${API}\" | $MATCH"
 CODE="curl -o /dev/null --silent --head --write-out '%{http_code}\n'"
 u="${BING_HOME}`eval $ACTION`"
 for sz in "${SIZES[@]}"; do

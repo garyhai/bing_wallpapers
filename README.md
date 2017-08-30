@@ -60,9 +60,6 @@ the plist as needed to point to **bing-wallpaper.sh**.
   * `make install`
   * `make uninstall`
   * `make test` to test or to run the job at once.
-* Because macOS version of **grep** cannot support **Perl** style regular
-  expression extent, you may install **GNU** version by **Homebrew**:
-  `brew install grep --with-default-names`
 
 Configuration on Ubuntu
 -----------------------
