@@ -39,7 +39,7 @@ Options:
                                  try to download the different sizes by the
                                  order: [1920x1200, 1920x1080, 1366x768]
   -d --day                       Day of the bing photo count from today.
-                                 [-1, tomorrow; 0, today; 1, yesterday]
+                                 [-1, tomorrow; 0, today default; 1, yesterday]
 
   -h --help                      Show this screen.
   --version                      Show version.

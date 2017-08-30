@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 readonly SCRIPT=$(basename "$0")
-readonly VERSION='0.5.1'
+readonly VERSION='0.5.2'
 
 usage() {
 cat <<EOF
@@ -24,7 +24,7 @@ Options:
                                  to download the different sizes by the order:
                                  [1920x1200, 1920x1080, 1366x768]
   -d --day                       Day of the bing photo count from today.
-                                 [-1, tomorrow; 0, today; 1, yesterday]
+                                 [-1, tomorrow; 0, today, default; 1, yesterday]
   -h --help                      Show this screen.
   --version                      Show version.
 EOF
@@ -39,7 +39,7 @@ print_message() {
 # Defaults
 PICTURE_DIR="$HOME/Pictures/bing-wallpapers/"
 SIZES=("1920x1200" "1920x1080" "1366x768")
-DAY="-1"
+DAY="0"
 BING_HOME="https://www.bing.com"
 GGREP="/usr/local/bin/grep"
 
