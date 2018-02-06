@@ -112,11 +112,12 @@ for sz in "${SIZES[@]}"; do
         print_message "Downloading: $filename..."
         curl $CURL_QUIET -Lo "$PICTURE_DIR/$filename" "$url"
         "/Applications/Mission Control.app/Contents/MacOS/Mission Control"
-        sleep 2
         osascript -e "tell application \"System Events\" \
                       to set properties of desktops to \
-                      {picture rotation:0, \
-                       picture : \"$PICTURE_DIR/$filename\"}"
+                      {picture : \"$PICTURE_DIR/$filename\"}"
+        sleep 1
+        osascript -e "tell application \"System Events\" \
+                      to set picture rotation of desktops to 0"
     else
         print_message "Skipping: $filename..."
         "/Applications/Mission Control.app/Contents/MacOS/Mission Control"

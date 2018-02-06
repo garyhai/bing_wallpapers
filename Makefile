@@ -6,9 +6,8 @@ ACTOR_FILE=/usr/local/bin/$(ACTOR)
 LAUNCHER=launchctl
 
 all:
-	@echo "Please check your OS and grep."
-	@echo "Makefile support only MacOS and GNU grep."
-	@echo "You may get GNU grep by homebrew."
+	@echo "Please check your OS."
+	@echo "Makefile support only MacOS."
 
 install:
 	@-$(LAUNCHER) unload $(PLIST_FILE) 2> /dev/null
