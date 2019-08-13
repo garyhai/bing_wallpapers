@@ -19,6 +19,8 @@ Options:
   -p --picturedir <picture dir>  The full path to the picture download dir.
                                  Will be created if it does not exist.
                                  [default: $HOME/Pictures/bing-wallpapers/]
+  -r --region <region>           Market region: en-US, zh-CN ...
+                                 [default: None]
   -s --size                      Preferred size of the photo to download
                                  [default:1920x1200]. If it is not existed, try
                                  to download the different sizes by the order:
@@ -41,6 +43,7 @@ PICTURE_DIR="$HOME/Pictures/bing-wallpapers/"
 SIZES=("1920x1200" "1920x1080" "1366x768")
 DAY="0"
 BING_HOME="https://www.bing.com"
+REGION=""
 
 # Option parsing
 while [[ $# -gt 0 ]]; do
@@ -53,6 +56,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         -n|--filename)
             FILENAME="$2"
+            shift
+            ;;
+        -r|--region)
+            REGION="$2"
             shift
             ;;
         -s|--size)
@@ -93,7 +100,7 @@ done
 mkdir -p "${PICTURE_DIR}"
 
 # Parse bing.com and acquire picture URL(s)
-API="${BING_HOME}/HPImageArchive.aspx?format=xml&idx=${DAY}&n=1"
+API="${BING_HOME}/HPImageArchive.aspx?format=xml&idx=${DAY}&n=1&mkt=${REGION}"
 MATCH="perl -nle 'print $& if m{(?<=\<urlBase\>)(.*?)(?=\</urlBase\>)}'"
 ##MATCH="grep -Po '(?<=\<urlBase\>)(.*?)(?=\</urlBase\>)'"
 ACTION="curl -sL \"${API}\" | $MATCH"
