@@ -111,14 +111,13 @@ for sz in "${SIZES[@]}"; do
     http_code=`eval $CODE "$url"`
     if [ $http_code -ne 200 ]; then continue; fi
     if [ -z "$FILENAME" ]; then
-        filename=$(echo "$url"|sed -e "s/.*\/\(.*\)/\1/")
+        filename=$(echo "$url"|sed -e "s/.*id\=\(.*\)/\1/")
     else
         filename="$FILENAME"
     fi
     if [ $FORCE ] || [ ! -f "$PICTURE_DIR/$filename" ]; then
         print_message "Downloading: $filename..."
         curl $CURL_QUIET -Lo "$PICTURE_DIR/$filename" "$url"
-        "/Applications/Mission Control.app/Contents/MacOS/Mission Control"
         osascript -e "tell application \"System Events\" \
                       to set properties of desktops to \
                       {picture : \"$PICTURE_DIR/$filename\"}"
@@ -127,7 +126,6 @@ for sz in "${SIZES[@]}"; do
                       to set picture rotation of desktops to 0"
     else
         print_message "Skipping: $filename..."
-        "/Applications/Mission Control.app/Contents/MacOS/Mission Control"
         osascript -e "tell application \"System Events\" \
                       to set picture rotation of desktops to 1"
     fi
